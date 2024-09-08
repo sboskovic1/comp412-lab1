@@ -80,7 +80,7 @@ public class Scanner {
                         lineIndex++;
                         if (line[lineIndex] == 'd') {
                             lineIndex++;
-                            if (lineIndex < lineLength && line[lineIndex] == 'i') {
+                            if (lineIndex < lineLength && line[lineIndex] == 'I') {
                                 lineIndex++;
                                 return LOADI;
                             } else {
@@ -212,7 +212,6 @@ public class Scanner {
         try {
             constant = line[lineIndex] - '0';
             lineIndex++;
-            // System.out.println("constant: " + constant + " lineIndex: " + line[lineIndex]);
             while (lineIndex + 1 < lineLength && line[lineIndex] != ' ') {
                 if (!Character.isDigit(line[lineIndex]) && line[lineIndex] != ' ') {
                     System.out.println("ERROR: Expected a number, found " + line[lineIndex]);
@@ -225,7 +224,7 @@ public class Scanner {
             System.out.println("ERROR: Expected a number, found " + line[lineIndex]);
             return -1;
         }
-        return constant;
+        return constant * -1;
 
     }
 
@@ -246,13 +245,18 @@ public class Scanner {
                 throw new RuntimeException();
             }
         }
-        if (lineIndex == lineLength - 1) {
+        if (lineIndex >= lineLength) {
             newLine = true;
             lastWord = -1;
             return EOL;
         }
         int word = -1;
-        if (lastWord == 13) {
+        if (lineIndex + 1 < lineLength && line[lineIndex] == '/' && line[lineIndex + 1] == '/') {
+            newLine = true;
+            lastWord = -1;
+            return EOL;
+        }
+        if (lastWord == LOADI || lastWord == REGISTER) {
             word = nextConstant();
         } else {
             if (line[lineIndex] == ' ') {
