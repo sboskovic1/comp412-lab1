@@ -71,7 +71,7 @@ public class Scanner {
         switch (line[lineIndex]) {
             case 'l':
                 if (lineIndex + 3 >= lineLength) {
-                    return lineError();
+                    return SCAN_ERROR;
                 }
                 lineIndex++;
                 if (line[lineIndex] == 'o') {
@@ -95,7 +95,7 @@ public class Scanner {
             case 's':
                 lineIndex++;
                 if (lineIndex + 2 >= lineLength) {
-                    return lineError();
+                    return SCAN_ERROR;
                 }
                 if (line[lineIndex] == 't' && lineIndex + 3 < lineLength) {
                     lineIndex++;
@@ -119,7 +119,7 @@ public class Scanner {
                 return SCAN_ERROR;
             case 'r':
                 if (lineIndex + 1 >= lineLength) {
-                    return lineError();
+                    return SCAN_ERROR;
                 }
                 lineIndex++;
                 if (Character.isDigit(line[lineIndex])) {
@@ -131,7 +131,7 @@ public class Scanner {
                 return SCAN_ERROR;
             case 'm':
                 if (lineIndex + 3 >= lineLength) {
-                    return lineError();
+                    return SCAN_ERROR;
                 }
                 lineIndex++;
                 if (line[lineIndex] == 'u') {
@@ -147,7 +147,7 @@ public class Scanner {
                 return SCAN_ERROR;
             case 'a':
                 if (lineIndex + 2 >= lineLength) {
-                    return lineError();
+                    return SCAN_ERROR;
                 }
                 lineIndex++;
                 if (line[lineIndex] == 'd') {
@@ -160,7 +160,7 @@ public class Scanner {
                 return SCAN_ERROR;
             case '=':
                 if (lineIndex + 1 >= lineLength) {
-                    return lineError();
+                    return SCAN_ERROR;
                 }
                 lineIndex++;
                 if (line[lineIndex] == '>') {
@@ -170,7 +170,7 @@ public class Scanner {
                 return SCAN_ERROR;
             case 'o':
                 if (lineIndex + 4 >= lineLength) {
-                    return lineError();
+                    return SCAN_ERROR;
                 }
                 lineIndex++;
                 if (line[lineIndex] == 'u') {
@@ -192,7 +192,7 @@ public class Scanner {
                 return SCAN_ERROR;
             case 'n':
                 if (lineIndex + 2 >= lineLength) {
-                    return lineError();
+                    return SCAN_ERROR;
                 }
                 lineIndex++;
                 if (line[lineIndex] == 'o') {
@@ -207,28 +207,28 @@ public class Scanner {
         return SCAN_ERROR;
     }
 
-    public int nextConstant() {
+    public int nextConstant(int lineNumber) {
         int constant = 0;
         try {
             constant = line[lineIndex] - '0';
             lineIndex++;
-            while (lineIndex + 1 < lineLength && line[lineIndex] != ' ') {
-                if (!Character.isDigit(line[lineIndex]) && line[lineIndex] != ' ') {
-                    System.out.println("ERROR: Expected a number, found " + line[lineIndex]);
+            while (lineIndex + 1 < lineLength && line[lineIndex] != ' ' && line[lineIndex] != ',') {
+                if (!Character.isDigit(line[lineIndex])) {
+                    System.out.println("ERROR LINE " + lineNumber + ": Expected a number, found " + line[lineIndex]);
                     return 15;
                 }
                 constant = constant * 10 + line[lineIndex] - '0';
                 lineIndex++;
             }
         } catch (NumberFormatException e) {
-            System.out.println("ERROR: Expected a number, found " + line[lineIndex]);
+            System.out.println("ERROR LINE " + lineNumber + ": Expected a number, found " + line[lineIndex]);
             return -1;
         }
         return constant * -1;
 
     }
 
-    public int nextSymbol() {
+    public int nextSymbol(int lineNumber) {
         if (newLine) {
             try {
                 String lineStr = input.readLine();
@@ -241,7 +241,7 @@ public class Scanner {
                 lineIndex = 0;
                 newLine = false;
             } catch (IOException e) {
-                System.out.println("Error reading file");
+                System.out.println("ERROR LINE " + lineNumber + ": Could not open filename");
                 throw new RuntimeException();
             }
         }
@@ -257,7 +257,7 @@ public class Scanner {
             return EOL;
         }
         if (lastWord == LOADI || lastWord == REGISTER) {
-            word = nextConstant();
+            word = nextConstant(lineNumber);
         } else {
             if (line[lineIndex] == ' ') {
                 lineIndex++;
@@ -265,7 +265,6 @@ public class Scanner {
                     lineIndex++;
                 }
             } else if (lineIndex != 0){
-                System.out.println("ERROR: Space Expected, found " + line[lineIndex]);
                 while (lineIndex < lineLength && line[lineIndex] != ' ') {
                     lineIndex++;
                 }
@@ -282,15 +281,15 @@ public class Scanner {
         return word;
     }
 
-    private int lineError() {
-        lineIndex = 0;
-        newLine = true;
-        return SCAN_ERROR;        
-    }
+    // private int lineError() {
+    //     lineIndex = 0;
+    //     newLine = true;
+    //     return SCAN_ERROR;        
+    // }
 
     private int checkShift() {
         if (lineIndex + 4 >= lineLength) {
-            return lineError();
+            return SCAN_ERROR;
         }
         if (line[lineIndex] == 's') {
             lineIndex++;
@@ -310,5 +309,4 @@ public class Scanner {
         }
         return 2;
     }
-
 }

@@ -25,9 +25,28 @@ public class Main {
         } 
 
         Parser parser = null;
+        int flag = -1;
+        switch (args[0]) {
+            case "-s":
+                flag = 0;
+                break;
+            case "-p":
+                flag = 1;
+                break;
+            case "-r":
+                flag = 2;
+                break;
+            default:
+                System.out.println("Invalid flag");
+                return;
+        }
         System.out.println("Starting Parser");
         try {
-            parser = new Parser(args[0], 0);
+            if (flag == -1) {
+                parser = new Parser(args[0], 1);
+            } else {
+                parser = new Parser(args[1], flag);
+            }
 
         } catch (RuntimeException e) {
             return;
