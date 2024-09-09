@@ -1,5 +1,7 @@
 package comp412lab1;
 
+import java.util.Scanner;
+
 public class IRRow {
     
     public int opcode;
@@ -36,7 +38,7 @@ public class IRRow {
         if (op1 != null) {
             line += op1.toString();
         }
-        if (op2 != null) {
+        if (op2 != null && (opcode >= 6 && opcode <= 10)) {
             line += op2.toString();
         }
         if (op3 != null) {
@@ -53,14 +55,17 @@ public class IRRow {
 
         public Operant(int sr) {
             SR = sr;
-            VR = 0;
-            PR = 0;
-            NU = 0;
+            VR = -1;
+            PR = -1;
+            NU = -1;
         }
 
         public String toString() {
 
-            return "[SR: " + SR + ", VR: " + VR + ", PR: " + PR + ", NU: " + NU + "] ";
+            return "[SR: " + (SR == -1 ? "-" : SR)  + 
+                    ", VR: " + (VR == -1 ? "-" : VR) + 
+                    ", PR: " + (PR == -1 ? "-" : PR) + 
+                    ", NU: " + (NU == -1 ? "-" : NU) + "] ";
         }
     }
 }

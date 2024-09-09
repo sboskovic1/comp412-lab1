@@ -1,4 +1,4 @@
 
 // Comment
-load  r1 => r7
+loadI 194 => r7
 load r2 => r2

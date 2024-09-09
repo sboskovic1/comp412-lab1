@@ -13,7 +13,6 @@ import java.util.*;
  */
 public class Scanner {
 
-    final int EOF = 0;
     final int EOL = 1;
     final int INTO = 2;
     final int LOAD = 3;
@@ -29,6 +28,9 @@ public class Scanner {
     final int REGISTER = 13;
     final int COMMA = 14;
     final int SCAN_ERROR = 15;
+    final int PARSE_ERROR = 16;
+    final int EOF = 17;
+
 
     public Map<String, Integer> words;
     public BufferedReader input;
@@ -203,21 +205,33 @@ public class Scanner {
                     }
                 }
                 return SCAN_ERROR;
+            case ',':
+                lineIndex++;
+                return COMMA;
         }
         return SCAN_ERROR;
     }
 
     public int nextConstant(int lineNumber) {
         int constant = 0;
-        try {
-            constant = line[lineIndex] - '0';
+        while (lineIndex < lineLength && (line[lineIndex] == ' ' || line[lineIndex] == 9)) {
             lineIndex++;
-            while (lineIndex + 1 < lineLength && line[lineIndex] != ' ' && line[lineIndex] != ',') {
+        }
+        if (lineIndex >= lineLength) {
+            return SCAN_ERROR;
+        }
+        try {
+            constant = Integer.parseInt(line[lineIndex] + "");
+            lineIndex++;
+            while (lineIndex < lineLength && line[lineIndex] != 9 && line[lineIndex] != ',' && line[lineIndex] != '=' && line[lineIndex] != 32) {
                 if (!Character.isDigit(line[lineIndex])) {
-                    System.out.println("ERROR LINE " + lineNumber + ": Expected a number, found " + line[lineIndex]);
+                    if (line[lineIndex] == '/' && lineIndex + 1 < lineLength && line[lineIndex + 1] == '/') {
+                        return constant * -1;
+                    }
+                    System.out.println("ERROR LINE " + lineNumber + ": Expected a number but found " + line[lineIndex]);
                     return 15;
                 }
-                constant = constant * 10 + line[lineIndex] - '0';
+                constant = constant * 10 + Integer.parseInt(line[lineIndex] + "");
                 lineIndex++;
             }
         } catch (NumberFormatException e) {
@@ -251,24 +265,28 @@ public class Scanner {
             return EOL;
         }
         int word = -1;
-        if (lineIndex + 1 < lineLength && line[lineIndex] == '/' && line[lineIndex + 1] == '/') {
-            newLine = true;
-            lastWord = -1;
-            return EOL;
-        }
-        if (lastWord == LOADI || lastWord == REGISTER) {
+        if (lastWord == LOADI || lastWord == REGISTER || lastWord == OUTPUT) {
             word = nextConstant(lineNumber);
         } else {
-            if (line[lineIndex] == ' ') {
-                lineIndex++;
-                while (lineIndex < lineLength && line[lineIndex] == ' ') {
+            if (line[lineIndex] == ' ' || line[lineIndex] == 9) {
+                while (lineIndex < lineLength && (line[lineIndex] == ' ' || line[lineIndex] == 9)) {
                     lineIndex++;
                 }
-            } else if (lineIndex != 0){
+                if (lineIndex >= lineLength) {
+                    newLine = true;
+                    lastWord = -1;
+                    return EOL;
+                }
+            } else if (lineIndex != 0 && line[lineIndex] != ',' && lastWord != INTO && lastWord != COMMA && !((lastWord == REGISTER || lastWord < 0) && line[lineIndex] == '=') && line[lineIndex] != '/') {
                 while (lineIndex < lineLength && line[lineIndex] != ' ') {
                     lineIndex++;
                 }
                 return SCAN_ERROR;
+            }
+            if (lineIndex + 1 < lineLength && line[lineIndex] == '/' && line[lineIndex + 1] == '/') {
+                newLine = true;
+                lastWord = -1;
+                return EOL;
             }
             word = nextWord();
         }
@@ -280,12 +298,6 @@ public class Scanner {
         }
         return word;
     }
-
-    // private int lineError() {
-    //     lineIndex = 0;
-    //     newLine = true;
-    //     return SCAN_ERROR;        
-    // }
 
     private int checkShift() {
         if (lineIndex + 4 >= lineLength) {
@@ -308,5 +320,9 @@ public class Scanner {
             }
         }
         return 2;
+    }
+
+    public boolean endOfLine() {
+        return lineIndex >= lineLength;
     }
 }

@@ -36,9 +36,6 @@ public class Main {
             case "-r":
                 flag = 2;
                 break;
-            default:
-                System.out.println("Invalid flag");
-                return;
         }
         System.out.println("Starting Parser");
         try {
