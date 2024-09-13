@@ -41,7 +41,7 @@ public class Parser {
         try {
             this.scanner = new Scanner(filepath);
         } catch (RuntimeException e) {
-            throw new RuntimeException("Error creating scanner");
+            throw new RuntimeException("ERROR: Could not create scanner");
         }
         this.flag = flag;
         this.lineNumber = 1;
@@ -82,8 +82,6 @@ public class Parser {
             System.out.println("LINE " + lineNumber + ": EOF");
         }
 
-        System.out.println("End of file");
-
         if (flag == 1) {
             if (error) {
                 System.out.println("Parse found errors.");
@@ -106,7 +104,7 @@ public class Parser {
                     if (symbol <= 0) {
                         System.out.println("LINE " + lineNumber + ": r" + (symbol * -1));
                     } else {
-                        System.out.println("ERROR LINE " + lineNumber + ": Expected constant after register, found" + tokenMap.get(symbol));
+                        System.err.println("ERROR " + lineNumber + ": Expected constant after register, found" + tokenMap.get(symbol));
                     }
                 } else {
                     System.out.println("LINE " + lineNumber + ": " + tokenMap.get(symbol));
@@ -139,12 +137,12 @@ public class Parser {
         } else if (token == scanner.NOP) { // NOP
             return parseNop(flag, token);
         } else if (token == scanner.SCAN_ERROR) { // ERROR
-            System.out.println("ERROR LINE " + lineNumber + ": Invalid token at the start of line");
+            System.err.println("ERROR " + lineNumber + ": Invalid token at the start of line");
             error = true;
             parseError();
             return new IRRow();
         }
-        System.out.println("ERROR LINE " + lineNumber + ": Line can not start with " + (tokenMap.containsKey(token) ? tokenMap.get(token) : "CONSTANT: " + token * -1));
+        System.err.println("ERROR " + lineNumber + ": Line can not start with " + (tokenMap.containsKey(token) ? tokenMap.get(token) : "CONSTANT: " + token * -1));
         error = true;
         parseError();
         return new IRRow(16);
@@ -180,27 +178,27 @@ public class Parser {
                                 lineNumber++;
                                 return new IRRow(token, r1, 0, r2);
                             } else {
-                                System.out.println("ERROR LINE " + lineNumber + ": Expected EOL after register, found " + tokenMap.get(currSymbol));
+                                System.err.println("ERROR " + lineNumber + ": Expected EOL after register, found " + tokenMap.get(currSymbol));
                                 error = true;
                             }
                         } else {
-                            System.out.println("ERROR LINE " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
+                            System.err.println("ERROR " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
                             error = true;
                         }
                     } else {
-                        System.out.println("ERROR LINE " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
+                        System.err.println("ERROR " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
                         error = true;
                     }
                 } else {
-                    System.out.println("ERROR LINE " + lineNumber + ": Expected INTO after register, found " + tokenMap.get(currSymbol));
+                    System.err.println("ERROR " + lineNumber + ": Expected INTO after register, found " + tokenMap.get(currSymbol));
                     error = true;
                 }
             } else {
-                System.out.println("ERROR LINE " + lineNumber + ": Expected constant after register, found " + tokenMap.get(currSymbol));
+                System.err.println("ERROR " + lineNumber + ": Expected constant after register, found " + tokenMap.get(currSymbol));
                 error = true;
             }
         } else {
-            System.out.println("ERROR LINE " + lineNumber + ": Expected register after MEMOP, found " + tokenMap.get(currSymbol));
+            System.err.println("ERROR " + lineNumber + ": Expected register after MEMOP, found " + tokenMap.get(currSymbol));
             error = true;
         }
         return new IRRow(16);
@@ -247,39 +245,39 @@ public class Parser {
                                             lineNumber++;
                                             return new IRRow(token, r1, r2, r3);
                                         } else {
-                                            System.out.println("ERROR LINE " + lineNumber + ": Expected EOL after register, found " + tokenMap.get(currSymbol));
+                                            System.err.println("ERROR " + lineNumber + ": Expected EOL after register, found " + tokenMap.get(currSymbol));
                                             error = true;
                                         }
                                     } else {
-                                        System.out.println("ERROR LINE " + lineNumber + ": Expected constant after register, found " + tokenMap.get(currSymbol));
+                                        System.err.println("ERROR " + lineNumber + ": Expected constant after register, found " + tokenMap.get(currSymbol));
                                         error = true;
                                     }
                                 } else {
-                                    System.out.println("ERROR LINE " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
+                                    System.err.println("ERROR " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
                                     error = true;
                                 }
                             } else {
-                                System.out.println("ERROR LINE " + lineNumber + ": Expected INTO after register, found " + tokenMap.get(currSymbol));
+                                System.err.println("ERROR " + lineNumber + ": Expected INTO after register, found " + tokenMap.get(currSymbol));
                                 error = true;
                             }
                         } else {
-                            System.out.println("ERROR LINE " + lineNumber + ": Expected constant after register, found " + tokenMap.get(currSymbol));
+                            System.err.println("ERROR " + lineNumber + ": Expected constant after register, found " + tokenMap.get(currSymbol));
                             error = true;
                         }
                     } else {
-                        System.out.println("ERROR LINE " + lineNumber + ": Expected register after COMMA, found " + tokenMap.get(currSymbol));
+                        System.err.println("ERROR " + lineNumber + ": Expected register after COMMA, found " + tokenMap.get(currSymbol));
                         error = true;
                     }
                 } else {
-                    System.out.println("ERROR LINE " + lineNumber + ": Expected COMMA after register, found " + tokenMap.get(currSymbol));
+                    System.err.println("ERROR " + lineNumber + ": Expected COMMA after register, found " + tokenMap.get(currSymbol));
                     error = true;
                 }
             } else {
-                System.out.println("ERROR LINE " + lineNumber + ": Expected constant after REGISTER, found " + tokenMap.get(currSymbol));
+                System.err.println("ERROR " + lineNumber + ": Expected constant after REGISTER, found " + tokenMap.get(currSymbol));
                 error = true;
             }
         } else {
-            System.out.println("ERROR LINE " + lineNumber + ": Expected register after ARITHOP, found " + tokenMap.get(currSymbol));
+            System.err.println("ERROR " + lineNumber + ": Expected register after ARITHOP, found " + tokenMap.get(currSymbol));
             error = true;
         }
         return new IRRow(16);
@@ -314,23 +312,23 @@ public class Parser {
                             lineNumber++;
                             return new IRRow(token, constant, 0, r1);
                         } else {
-                            System.out.println("ERROR LINE " + lineNumber + ": Expected EOL after register, found " + tokenMap.get(currSymbol));
+                            System.err.println("ERROR " + lineNumber + ": Expected EOL after register, found " + tokenMap.get(currSymbol));
                             error = true;
                         }
                     } else {
-                        System.out.println("ERROR LINE " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
+                        System.err.println("ERROR " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
                         error = true;
                     }
                 } else {
-                    System.out.println("ERROR LINE " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
+                    System.err.println("ERROR " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
                     error = true;
                 }
             } else {
-                System.out.println("ERROR LINE " + lineNumber + ": Expected INTO after constant, found " + tokenMap.get(currSymbol));
+                System.err.println("ERROR " + lineNumber + ": Expected INTO after constant, found " + tokenMap.get(currSymbol));
                 error = true;
             }
         } else {
-            System.out.println("ERROR LINE " + lineNumber + ": Expected constant after LOADI, found " + tokenMap.get(currSymbol));
+            System.err.println("ERROR " + lineNumber + ": Expected constant after LOADI, found " + tokenMap.get(currSymbol));
             error = true;
         }
         return new IRRow(16);
@@ -354,11 +352,11 @@ public class Parser {
                 lineNumber++;
                 return new IRRow(token, constant, 0, 0);
             } else {
-                System.out.println("ERROR LINE " + lineNumber + ": Expected EOL after constant, found " + tokenMap.get(currSymbol));
+                System.err.println("ERROR " + lineNumber + ": Expected EOL after constant, found " + tokenMap.get(currSymbol));
                 error = true;
             }
         } else {
-            System.out.println("ERROR LINE " + lineNumber + ": Expected constant after OUTPUT, found " + tokenMap.get(currSymbol));
+            System.err.println("ERROR " + lineNumber + ": Expected constant after OUTPUT, found " + tokenMap.get(currSymbol));
             error = true;
         }
         return new IRRow(16);
@@ -375,7 +373,7 @@ public class Parser {
             lineNumber++;
             return new IRRow(token);
         } else {
-            System.out.println("ERROR LINE " + lineNumber + ": Expected EOL after NOP, found " + tokenMap.get(scanner.nextSymbol(lineNumber)));
+            System.err.println("ERROR " + lineNumber + ": Expected EOL after NOP, found " + tokenMap.get(scanner.nextSymbol(lineNumber)));
             error = true;
         }
         return new IRRow(16);

@@ -1,6 +1,6 @@
 package comp412lab1;
 
-import comp412lab1.*;
+//import comp412lab1.*;
 
 public class Main {
 
@@ -37,7 +37,6 @@ public class Main {
                 flag = 2;
                 break;
         }
-        System.out.println("Starting Parser");
         try {
             if (flag == -1) {
                 parser = new Parser(args[0], 1);

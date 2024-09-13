@@ -1,0 +1,2 @@
+NetId	Name	T1k	T2k	T4k	T8k	T16k	T32k	T64k	T128k	Lang.	Scaling	Scal Pts	Eff Pts
+sb121	Stefan Boskovic	60	60	60	60	60	60	60	60	timed-out	 timed-out 	0.0	0.0

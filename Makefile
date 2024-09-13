@@ -1,18 +1,28 @@
-JAVAC = javac
-JAR = jar
+# JAVAC = javac
+# JAR = jar
+# JFLAGS = -g
+# MAINCLASS = Main
+# SRC = $(wildcard *.java)
+# CLASSES = $(SRC:.java=.class)
+# JARFILE = lab1.jar
+
+# all: $(JARFILE)
+
+# $(JARFILE): $(CLASSES)
+# 	$(JAR) cf $(JARFILE) $(MAINCLASS).class
+
+# %.class: %.java
+# 	$(JAVAC) $(JFLAGS) $<
+
+# clean:
+# 	rm -f *.class $(JARFILE)
+
 JFLAGS = -g
-MAINCLASS = Main
-SRC = $(wildcard *.java)
-CLASSES = $(SRC:.java=.class)
-JARFILE = lab1.jar
+JC = javac
+.SUFFIXES: .java .class
 
-all: $(JARFILE)
-
-$(JARFILE): $(CLASSES)
-	$(JAR) cf $(JARFILE) $(MAINCLASS).class
-
-%.class: %.java
-	$(JAVAC) $(JFLAGS) $<
+build: Main.java
+	$(JC) $(JFLAGS) Main.java IRRow.java Parser.java Scanner.java
 
 clean:
-	rm -f *.class $(JARFILE)
+	$(RM) *.class

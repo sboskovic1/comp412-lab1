@@ -1,3 +1,2 @@
 #!/bin/bash
-clear
 java -cp lab1.jar Main.java $@

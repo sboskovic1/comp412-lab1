@@ -64,7 +64,7 @@ public class Scanner {
         try {
             input = new BufferedReader(new FileReader(filepath));
         } catch (IOException e) {
-            System.out.println("File not found");
+            System.err.println("ERROR: File not found");
             throw new RuntimeException();
         }
     }
@@ -228,14 +228,14 @@ public class Scanner {
                     if (line[lineIndex] == '/' && lineIndex + 1 < lineLength && line[lineIndex + 1] == '/') {
                         return constant * -1;
                     }
-                    System.out.println("ERROR LINE " + lineNumber + ": Expected a number but found " + line[lineIndex]);
+                    System.err.println("ERROR " + lineNumber + ": Expected a number but found " + line[lineIndex]);
                     return 15;
                 }
                 constant = constant * 10 + Integer.parseInt(line[lineIndex] + "");
                 lineIndex++;
             }
         } catch (NumberFormatException e) {
-            System.out.println("ERROR LINE " + lineNumber + ": Expected a number, found " + line[lineIndex]);
+            System.err.println("ERROR " + lineNumber + ": Expected a number, found " + line[lineIndex]);
             return -1;
         }
         return constant * -1;
@@ -255,7 +255,7 @@ public class Scanner {
                 lineIndex = 0;
                 newLine = false;
             } catch (IOException e) {
-                System.out.println("ERROR LINE " + lineNumber + ": Could not open filename");
+                System.err.println("ERROR " + lineNumber + ": Could not open filename");
                 throw new RuntimeException();
             }
         }

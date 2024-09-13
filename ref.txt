@@ -1,1 +1,3 @@
 ./lab1_ref -s ../../../../../storage-home/s/sb121/comp412-lab1/comp412lab1/
+./submit_1 ../../../../storage-home/s/sb121/comp412-lab1/sb121.tar
+tar cvf ../sb121.tar Makefile *java 412fe README.md
