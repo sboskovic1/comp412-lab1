@@ -3,10 +3,8 @@
  * print messages for syntax errors
  * build the IR?
  */
-package comp412lab1;
-
-import comp412lab1.Scanner;
-import comp412lab1.IRRow;
+// import comp412lab1.Scanner;
+// import comp412lab1.IRRow;
 import java.util.*;
 
 public class Parser {
@@ -61,7 +59,6 @@ public class Parser {
         IRRow row;
 
         while (token != scanner.EOF) {
-            // Will this access take a long time? (scanner.eof, row.opcode)
             row = parseLine(flag, token);
             if (!error && row.opcode != 1) {
                 prev.next = row;
@@ -182,7 +179,7 @@ public class Parser {
                                 error = true;
                             }
                         } else {
-                            System.err.println("ERROR " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
+                            System.err.println("ERROR " + lineNumber + ": Expected CONSTANT after register, found " + tokenMap.get(currSymbol));
                             error = true;
                         }
                     } else {
@@ -312,11 +309,11 @@ public class Parser {
                             lineNumber++;
                             return new IRRow(token, constant, 0, r1);
                         } else {
-                            System.err.println("ERROR " + lineNumber + ": Expected EOL after register, found " + tokenMap.get(currSymbol));
+                            System.err.println("ERROR " + lineNumber + ": Expected EOL after REGISTER, found " + tokenMap.get(currSymbol));
                             error = true;
                         }
                     } else {
-                        System.err.println("ERROR " + lineNumber + ": Expected register after INTO, found " + tokenMap.get(currSymbol));
+                        System.err.println("ERROR " + lineNumber + ": Expected CONSTANT after REGISTER, found " + tokenMap.get(currSymbol));
                         error = true;
                     }
                 } else {

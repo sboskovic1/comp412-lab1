@@ -1,7 +1,3 @@
-package comp412lab1;
-
-//import comp412lab1.*;
-
 public class Main {
 
     static final String helpMessage = "COMP 412, Fall 2024, Front End by Stefan Boskovic (sb121)\r\n" + //

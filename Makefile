@@ -22,7 +22,7 @@ JC = javac
 .SUFFIXES: .java .class
 
 build: Main.java
-	$(JC) $(JFLAGS) Main.java IRRow.java Parser.java Scanner.java
+	$(JC) $(JFLAGS) *.java
 
 clean:
 	$(RM) *.class

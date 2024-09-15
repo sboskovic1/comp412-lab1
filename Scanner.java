@@ -1,5 +1,3 @@
-package comp412lab1;
-
 import java.io.*;
 import java.util.*;
 
@@ -295,6 +293,9 @@ public class Scanner {
             while (lineIndex < lineLength && line[lineIndex] != ' ') {
                 lineIndex++;
             }
+            if (lineIndex >= lineLength) {
+                lastWord = EOL;
+            }
         }
         return word;
     }
@@ -323,6 +324,6 @@ public class Scanner {
     }
 
     public boolean endOfLine() {
-        return lineIndex >= lineLength;
+        return (lineIndex >= lineLength) && (lastWord != EOL);
     }
 }

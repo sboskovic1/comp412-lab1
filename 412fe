@@ -1,2 +1,2 @@
 #!/bin/bash
-java -cp lab1.jar Main.java $@
+java Main.java "$@"
