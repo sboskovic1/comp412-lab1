@@ -38,6 +38,8 @@ public class Scanner {
     private char[] line;
     private int lastWord;
 
+    // public Map<Character, Integer> letters;
+
     public Scanner(String filepath) {
         words = new HashMap<String, Integer>();
         words.put("r", REGISTER);
@@ -54,6 +56,17 @@ public class Scanner {
         words.put("nop", NOP);
         words.put(",", COMMA);
 
+        // letters = new HashMap<Character, Integer>();
+        // letters.put('r', 0);
+        // letters.put('l', 0);
+        // letters.put('s', 0);
+        // letters.put('m', 0);
+        // letters.put('a', 0);
+        // letters.put('=', 0);
+        // letters.put('o', 0);
+        // letters.put('n', 0);
+        // letters.put(',', 0);
+
         newLine = true;
         lineLength = 0;
         lineIndex = 0;
@@ -69,7 +82,50 @@ public class Scanner {
 
     public int nextWord() {
         switch (line[lineIndex]) {
+            case 'r':
+                // letters.put('r', letters.get('r') + 1);
+                if (lineIndex + 1 >= lineLength) {
+                    return SCAN_ERROR;
+                }
+                lineIndex++;
+                if (Character.isDigit(line[lineIndex])) {
+                    return REGISTER;
+                }
+                if (checkShift() == 1) {
+                    return RSHIFT;
+                }
+                return SCAN_ERROR;
+            case '=':
+                // letters.put('=', letters.get('=') + 1);
+                if (lineIndex + 1 >= lineLength) {
+                    return SCAN_ERROR;
+                }
+                lineIndex++;
+                if (line[lineIndex] == '>') {
+                    lineIndex++;
+                    return INTO;
+                }
+                return SCAN_ERROR;
+            case 'a':
+                // letters.put('a', letters.get('a') + 1);
+                if (lineIndex + 2 >= lineLength) {
+                    return SCAN_ERROR;
+                }
+                lineIndex++;
+                if (line[lineIndex] == 'd') {
+                    lineIndex++;
+                    if (line[lineIndex] == 'd') {
+                        lineIndex++;
+                        return ADD;
+                    }
+                }
+                return SCAN_ERROR;
+            case ',':
+                // letters.put(',', letters.get(',') + 1);
+                lineIndex++;
+                return COMMA;
             case 'l':
+                // letters.put('l', letters.get('l') + 1);
                 if (lineIndex + 3 >= lineLength) {
                     return SCAN_ERROR;
                 }
@@ -93,6 +149,7 @@ public class Scanner {
                 }
                 return SCAN_ERROR;
             case 's':
+                // letters.put('s', letters.get('s') + 1);
                 lineIndex++;
                 if (lineIndex + 2 >= lineLength) {
                     return SCAN_ERROR;
@@ -117,19 +174,8 @@ public class Scanner {
                     }
                 }
                 return SCAN_ERROR;
-            case 'r':
-                if (lineIndex + 1 >= lineLength) {
-                    return SCAN_ERROR;
-                }
-                lineIndex++;
-                if (Character.isDigit(line[lineIndex])) {
-                    return REGISTER;
-                }
-                if (checkShift() == 1) {
-                    return RSHIFT;
-                }
-                return SCAN_ERROR;
             case 'm':
+                // letters.put('m', letters.get('m') + 1);
                 if (lineIndex + 3 >= lineLength) {
                     return SCAN_ERROR;
                 }
@@ -145,30 +191,8 @@ public class Scanner {
                     }
                 }
                 return SCAN_ERROR;
-            case 'a':
-                if (lineIndex + 2 >= lineLength) {
-                    return SCAN_ERROR;
-                }
-                lineIndex++;
-                if (line[lineIndex] == 'd') {
-                    lineIndex++;
-                    if (line[lineIndex] == 'd') {
-                        lineIndex++;
-                        return ADD;
-                    }
-                }
-                return SCAN_ERROR;
-            case '=':
-                if (lineIndex + 1 >= lineLength) {
-                    return SCAN_ERROR;
-                }
-                lineIndex++;
-                if (line[lineIndex] == '>') {
-                    lineIndex++;
-                    return INTO;
-                }
-                return SCAN_ERROR;
             case 'o':
+                // letters.put('o', letters.get('o') + 1);
                 if (lineIndex + 4 >= lineLength) {
                     return SCAN_ERROR;
                 }
@@ -191,6 +215,7 @@ public class Scanner {
                 }
                 return SCAN_ERROR;
             case 'n':
+                // letters.put('n', letters.get('n') + 1);
                 if (lineIndex + 2 >= lineLength) {
                     return SCAN_ERROR;
                 }
@@ -203,9 +228,6 @@ public class Scanner {
                     }
                 }
                 return SCAN_ERROR;
-            case ',':
-                lineIndex++;
-                return COMMA;
         }
         return SCAN_ERROR;
     }

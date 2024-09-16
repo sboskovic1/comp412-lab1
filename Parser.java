@@ -86,6 +86,10 @@ public class Parser {
                 System.out.println("Parse Succeeded. Processed " + (lineNumber - blankLines) + " operations.");
             }
         }
+
+        // for (Map.Entry<Character, Integer> entry : scanner.letters.entrySet()) {
+        //     System.out.println(entry.getKey() + ":" + entry.getValue());
+        // }
     }
 
     public void parseError() {
